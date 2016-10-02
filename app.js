@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 
 //Connect to Database only if Config.js parameter is set.
 
-if(config.use_database==='true')
+if(config.use_database === 'true')
 {
     connection.connect();
 }
@@ -44,7 +44,7 @@ passport.use(new FacebookStrategy({
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
       //Check whether the User exists or not using profile.id
-      if(config.use_database==='true')
+      if(config.use_database === 'true')
       {
       connection.query("SELECT * from user_info where user_id="+profile.id,function(err,rows,fields){
         if(err) throw err;

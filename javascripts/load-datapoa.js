@@ -1,47 +1,39 @@
 var LoadDataPoa = (function (dataPoaConfiguration) {
 	'use strict';
 
+	var goo = google.maps;
+
 	var _datas = [];
 	var _markers = [];
-
-	var __const = {
-		route: {
-			names: {
-				origin: 'Ponto de Partida',
-				originNearestBikeStation: 'Estação de Bicicleta Mais Próxima do Ponto de Partida',
-				destinationNearestBikeStation: 'Estação de Bicicleta Mais Próxima do Ponto de Chegada',
-				destination: 'Ponto de Chegada'
-			}
-		}
-	}
+	var _routeMarkers = [];
 
 	var __mapProperties = {
 		map: { },
-		infoWindow: new google.maps.InfoWindow(),
-	  bounds: new google.maps.LatLngBounds(),
-	  directionsService : new google.maps.DirectionsService(),
-	  directionsDisplay1: { },
-	  directionsDisplay2: { },
-	  directionsDisplay3: { },
+		infoWindow: new goo.InfoWindow(),
+		//bounds: new goo.LatLngBounds(),
+	  	directionsService : new goo.DirectionsService(),
+	  	directionsDisplay1: { },
+	  	directionsDisplay2: { },
+	  	directionsDisplay3: { },
 		icons: {
-		    cycling: new google.maps.MarkerImage(
-		    	'http://maps.google.com/mapfiles/ms/micons/cycling.png',
-					new google.maps.Size(44, 32),
-					new google.maps.Point(0, 0),
-					new google.maps.Point(22, 32)
+		    cycling: new goo.MarkerImage(
+		    	Constants.get.urls.icons.map.markers.cycling,
+					new goo.Size(44, 32),
+					new goo.Point(0, 0),
+					new goo.Point(22, 32)
 				),
-		    woman: new google.maps.MarkerImage(
-			    'http://maps.google.com/mapfiles/ms/micons/woman.png',
-			    new google.maps.Size(44, 32),
-			    new google.maps.Point(0, 0),
-			    new google.maps.Point(22, 32)
+		    woman: new goo.MarkerImage(
+			    Constants.get.urls.icons.map.markers.woman,
+			    new goo.Size(44, 32),
+			    new goo.Point(0, 0),
+			    new goo.Point(22, 32)
 				)
 		}
 	};
 
 	var __options = {
 		resource_id: '',
-		data_poa_url: 'http://datapoa.com.br/api/action/datastore_search',
+		data_poa_url: Constants.get.urls.datapoa,
 		poa_coordinates: { lat: -30.052778, long: -51.23 }
 	};
 
@@ -52,10 +44,10 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 		minZoom: 10,
 		zoom: 15,
 		zoomControlOptions: {
-			style: google.maps.ZoomControlStyle.SMALL
+			style: goo.ZoomControlStyle.SMALL
 		},
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		center: new google.maps.LatLng(__options.poa_coordinates.lat, __options.poa_coordinates.long)
+		mapTypeId: goo.MapTypeId.ROADMAP,
+		center: new goo.LatLng(__options.poa_coordinates.lat, __options.poa_coordinates.long)
 	};
 
 	$.extend(__mapOptions, dataPoaConfiguration.mapOptions);
@@ -89,12 +81,12 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 
 	var initializeMap = function () {
 
-		var mapContainer = $("#mapContainer")[0];
-	 	__mapProperties.map = new google.maps.Map(mapContainer, __mapOptions);
+		var mapContainer = $(Constants.get.ids.containers.map)[0];
+	 	__mapProperties.map = new goo.Map(mapContainer, __mapOptions);
 
-		__mapProperties.directionsDisplay1 = new google.maps.DirectionsRenderer(getDirectionsRendererConfig('blue'));
-		__mapProperties.directionsDisplay2 = new google.maps.DirectionsRenderer(getDirectionsRendererConfig('green'));
-		__mapProperties.directionsDisplay3 = new google.maps.DirectionsRenderer(getDirectionsRendererConfig('blue'));
+		__mapProperties.directionsDisplay1 = new goo.DirectionsRenderer(getDirectionsRendererConfig(Constants.get.colors.blue));
+		__mapProperties.directionsDisplay2 = new goo.DirectionsRenderer(getDirectionsRendererConfig(Constants.get.colors.green));
+		__mapProperties.directionsDisplay3 = new goo.DirectionsRenderer(getDirectionsRendererConfig(Constants.get.colors.blue));
 
 		initializeMarkers();
 	};
@@ -114,7 +106,7 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 
 		$.each(_datas, function(index, element) {
 
-			var marker = createMarker(getBikeStationMarkerConfig(element.nome, element.LATITUDE, element.LONGITUDE));
+			var marker = createMarker(getBikeStationMarkerConfig(element.nome, element.LATITUDE, element.LONGITUDE), _markers);
 
 			var content = dataPoaConfiguration.getInfoMarkerString(element);
 			createMarkerInfo(marker, element, content);
@@ -123,7 +115,7 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 
 	var getBikeStationMarkerConfig = function (nome, latitude, longitude) {
 		var config = {
-			position: new google.maps.LatLng(latitude, longitude),
+			position: new goo.LatLng(latitude, longitude),
 			map: __mapProperties.map,
 			title: dataPoaConfiguration.getFriendlyName(nome)
 		};
@@ -132,21 +124,21 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 	};
 
 	var createMarkerInfo = function (marker, element, content) {
-		google.maps.event.addListener(marker, 'click', function() {
+		goo.event.addListener(marker, 'click', function() {
 			__mapProperties.infoWindow.setContent(content);
 			__mapProperties.infoWindow.open(__mapProperties.map, marker);
 		});
 	};
 
 	var getRoute = function (originLocation, destinationLocation) {
-		var origin = new google.maps.LatLng(originLocation.getLatitude(), originLocation.getLongitude());
+		var origin = new goo.LatLng(originLocation.getLatitude(), originLocation.getLongitude());
 		var originNearestBikeStation = getNearestPositionFrom(originLocation);
 		var destinationNearestBikeStation = getNearestPositionFrom(destinationLocation);
-		var destination = new google.maps.LatLng(destinationLocation.getLatitude(), destinationLocation.getLongitude());
+		var destination = new goo.LatLng(destinationLocation.getLatitude(), destinationLocation.getLongitude());
 
-		setRouteOnTheMap(origin, originNearestBikeStation, __const.route.names.origin, __const.route.names.originNearestBikeStation + '1', google.maps.TravelMode.WALKING, __mapProperties.directionsDisplay1);
-		setRouteOnTheMap(originNearestBikeStation, destinationNearestBikeStation, __const.route.names.originNearestBikeStation + '2', __const.route.names.destinationNearestBikeStation + '1',  google.maps.TravelMode.BICYCLING, __mapProperties.directionsDisplay2);
-		setRouteOnTheMap(destinationNearestBikeStation, destination, __const.route.names.destinationNearestBikeStation + '2', __const.route.names.destination,  google.maps.TravelMode.WALKING, __mapProperties.directionsDisplay3);
+		setRouteOnTheMap(origin, originNearestBikeStation, Constants.get.titles.markers.routes.origin, Constants.get.titles.markers.routes.originNearestBikeStation + '_', goo.TravelMode.WALKING, __mapProperties.directionsDisplay1);
+		setRouteOnTheMap(originNearestBikeStation, destinationNearestBikeStation, Constants.get.titles.markers.routes.originNearestBikeStation, Constants.get.titles.markers.routes.destinationNearestBikeStation + '_',  goo.TravelMode.BICYCLING, __mapProperties.directionsDisplay2);
+		setRouteOnTheMap(destinationNearestBikeStation, destination, Constants.get.titles.markers.routes.destinationNearestBikeStation, Constants.get.titles.markers.routes.destination,  goo.TravelMode.WALKING, __mapProperties.directionsDisplay3);
 	};
 
 	var getNearestPositionFrom = function (location) {
@@ -171,16 +163,16 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 		var request = getDirectionsServiceRequest(origin, destination, travelMode);
 
 		__mapProperties.directionsService.route(request, function(result, status) {
-	    if (status == google.maps.DirectionsStatus.OK) {
+	    if (status == goo.DirectionsStatus.OK) {
 	      directionsDisplay.setDirections(result);
 
 				var icon = getIconByTravelMode(travelMode);
 				var leg = result.routes[0].legs[0];
-				createMarker(getRoutePointMarkerConfig(originName, icon, leg.start_location));
-				createMarker(getRoutePointMarkerConfig(destinationName, icon, leg.end_location));
+				createMarker(getRoutePointMarkerConfig(originName, icon, leg.start_location), _routeMarkers);
+				createMarker(getRoutePointMarkerConfig(destinationName, icon, leg.end_location), _routeMarkers);
 				// __mapProperties.map.fitBounds(__mapProperties.bounds.union(result.routes[0].bounds));
 	    } else {
-	      alert("Ocorreu um erro ao calcular as distâncias: " + status);
+	      alert(Constants.get.messages.generic.error.replace('{{erro}}', status));
 	    }
 	  });
 	};
@@ -189,7 +181,7 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 		var request = {
 	    origin: originLatLng,
 	    destination: destinationLatLng,
-			optimizeWaypoints: true,
+		optimizeWaypoints: true,
 	    travelMode: travelMode
 	  };
 
@@ -200,10 +192,10 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 		var icon;
 
 		switch(travelMode) {
-			case google.maps.TravelMode.WALKING:
+			case goo.TravelMode.WALKING:
 		    icon = __mapProperties.icons.woman;
 		    break;
-			case google.maps.TravelMode.BICYCLING:
+			case goo.TravelMode.BICYCLING:
 		    icon = __mapProperties.icons.cycling;
 		    break;
 		}
@@ -211,19 +203,35 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 		return icon;
 	};
 
-	var createMarker = function (markerConfig) {
-		var marker = new google.maps.Marker(markerConfig);
+	var createMarker = function (markerConfig, markerArr) {
+		var marker = new goo.Marker(markerConfig);
 
-		addMarkerInArray(marker.title, marker.position);
+		addMarkerInArray(marker, markerArr);
 
 		return marker;
 	};
 
-	var addMarkerInArray = function (title, position) {
-		_markers[title] = {
-			position: position
+	var addMarkerInArray = function (marker, markerArr) {
+		markerArr[marker.title] = {
+			position: marker.position,
+			marker: marker
 		};
 	};
+
+	var clearRoutesMarkers = function () {
+		_routeMarkers[Constants.get.titles.markers.routes.origin].marker.setMap(null);
+		_routeMarkers[Constants.get.titles.markers.routes.originNearestBikeStation].marker.setMap(null);
+		_routeMarkers[Constants.get.titles.markers.routes.originNearestBikeStation + '_'].marker.setMap(null);
+		_routeMarkers[Constants.get.titles.markers.routes.destinationNearestBikeStation].marker.setMap(null);
+		_routeMarkers[Constants.get.titles.markers.routes.destinationNearestBikeStation + '_'].marker.setMap(null);
+		_routeMarkers[Constants.get.titles.markers.routes.destination].marker.setMap(null);
+		
+		_routeMarkers = [];
+
+		__mapProperties.directionsDisplay1.set('directions', null);
+		__mapProperties.directionsDisplay2.set('directions', null);
+		__mapProperties.directionsDisplay3.set('directions', null);
+	}
 
 	var getRoutePointMarkerConfig = function (nome, icon, position) {
 		var config = {
@@ -238,6 +246,7 @@ var LoadDataPoa = (function (dataPoaConfiguration) {
 
 	return {
 		init: init,
-		getRoute: getRoute
+		getRoute: getRoute,
+		clearRoutesMarkers: clearRoutesMarkers
 	};
 });
