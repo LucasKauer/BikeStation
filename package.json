@@ -11,5 +11,8 @@
 		"mysql": "2.4.3",
 		"passport": "0.2.1",
 		"passport-facebook": "latest"
-  	}
+  	},
+		"scripts": {
+			"start": "node app.js"
+		}
 }
