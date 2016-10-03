@@ -1,6 +1,9 @@
 {
-  "name": "passport-twitter-examples-signin",
+  "name": "bike-station",
   "version": "0.0.1",
+	"engines": {
+    "node": "5.9.1"
+  },
   "dependencies":
 	{
 		"body-parser": "1.7.0",
