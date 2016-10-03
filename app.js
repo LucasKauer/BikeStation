@@ -66,6 +66,7 @@ passport.use(new FacebookStrategy({
 
 
 app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -76,15 +77,16 @@ app.use('/css', express.static(__dirname + '/stylesheets'));
 app.use('/js', express.static(__dirname + '/javascripts'));
 app.use(express.static(__dirname + '/public'));
 
+
 app.get('/', ensureAuthenticated, function(req, res){
   if(req.isAuthenticated()) {
-    res.sendFile(__dirname + '/views' + '/index.html');
+    res.render('index.html');
   }
 });
 
 app.get('/login', function(req, res){
   if (!req.isAuthenticated()) { 
-    res.sendFile(__dirname + '/views' + '/login.html');
+    res.render('login.html');
   }
   else {
     res.redirect('/');
