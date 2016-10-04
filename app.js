@@ -77,7 +77,7 @@ app.use(session({ secret: 'keyboard cat', key: 'sid'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', function(req, res){
+app.get('/', ensureAuthenticated, function(req, res){
   if (req.isAuthenticated()) { 
     res.render('index.html');
   } else {
@@ -85,12 +85,8 @@ app.get('/', function(req, res){
   }
 });
 
-app.get('/login', function(req, res){
-  if (!req.isAuthenticated()) { 
+app.get('/login', ensureAuthenticated, function(req, res){
     res.render('login.html');
-  } else {
-    res.redirect('/');
-  }
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
@@ -101,9 +97,16 @@ app.get('/auth/facebook/callback',
     res.redirect('/');
   });
 
-app.get('/logout', function(req, res){
+app.get('/logout', ensureAuthenticated, function(req, res){
   req.logout();
   res.redirect('/');
 });
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); } 
+  else {
+    res.redirect('/login');
+  }
+}
 
 app.listen(process.env.PORT || 3000);
