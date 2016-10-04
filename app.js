@@ -82,8 +82,12 @@ app.get('/', function(req, res){
     }
 });
 
-app.get('/index', ensureAuthenticated, function(req, res) {
-    res.render('index.html');
+app.get('/index', function(req, res) {
+    if(req.isAuthenticated()) {
+      res.render('index.html');
+    } else {
+      res.redirect('/login');
+    }
     res.end();
 });
 
