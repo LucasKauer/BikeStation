@@ -68,15 +68,14 @@ passport.use(new FacebookStrategy({
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
+app.use('/css', express.static(__dirname + '/stylesheets'));
+app.use('/js', express.static(__dirname + '/javascripts'));
+app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'keyboard cat', key: 'sid'}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/css', express.static(__dirname + '/stylesheets'));
-app.use('/js', express.static(__dirname + '/javascripts'));
-app.use(express.static(__dirname + '/public'));
-
 
 app.get('/', ensureAuthenticated, function(req, res){
     res.render('index.html');
