@@ -84,12 +84,12 @@ app.get('/', function(req, res){
 
 app.get('/index', ensureAuthenticated, function(req, res) {
     res.render('index.html');
-    res.end()
+    res.end();
 });
 
 app.get('/login', function(req, res){
     res.render('login.html');
-    res.end()
+    res.end();
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
