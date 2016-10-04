@@ -18,7 +18,6 @@ var connection = mysql.createConnection({
 });
 
 //Connect to Database only if Config.js parameter is set.
-
 if(config.use_database === 'true')
 {
     connection.connect();
@@ -33,9 +32,7 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-
 // Use the FacebookStrategy within Passport.
-
 passport.use(new FacebookStrategy({
     clientID: process.env.APP_KEY || config.facebook_api_key,
     clientSecret: process.env.APP_SECRET || config.facebook_api_secret ,
@@ -79,10 +76,14 @@ app.use(passport.session());
 
 app.get('/', ensureAuthenticated, function(req, res){
   if (req.isAuthenticated()) { 
-    res.render('index.html');
+    res.redirect('/index');
   } else {
     res.redirect('/login')
   }
+});
+
+app.get('/index', ensureAuthenticated, function(req, res) {
+  res.render('/index.html');
 });
 
 app.get('/login', function(req, res){
@@ -92,10 +93,10 @@ app.get('/login', function(req, res){
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 
 app.get('/auth/facebook/callback',
-  passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
+  passport.authenticate('facebook', { 
+    successRedirect : '/index', 
+    failureRedirect: '/login' 
+  }));
 
 app.get('/logout', ensureAuthenticated, function(req, res){
   req.logout();
@@ -103,10 +104,8 @@ app.get('/logout', ensureAuthenticated, function(req, res){
 });
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); } 
-  else {
+  if (req.isAuthenticated()) return next(); 
     res.redirect('/login');
-  }
 }
 
 app.listen(process.env.PORT || 3000);
