@@ -74,7 +74,7 @@ app.use(session({ secret: 'keyboard cat', key: 'sid'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', ensureAuthenticated, function(req, res){
+app.get('/', function(req, res){
   if (req.isAuthenticated()) { 
     res.redirect('/index');
   } else {
