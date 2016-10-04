@@ -78,14 +78,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', function(req, res){
+  if (req.isAuthenticated()) { 
     res.render('index.html');
+  } else {
+    res.redirect('/login')
+  }
 });
 
 app.get('/login', function(req, res){
   if (!req.isAuthenticated()) { 
     res.render('login.html');
-  }
-  else {
+  } else {
     res.redirect('/');
   }
 });
