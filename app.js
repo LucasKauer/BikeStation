@@ -75,19 +75,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', function(req, res){
-  if (req.isAuthenticated()) { 
-    res.redirect('/index');
-  } else {
-    res.redirect('/login')
-  }
+    if (req.isAuthenticated()) { 
+      res.redirect('/index');
+    } else {
+      res.redirect('/login')
+    }
 });
 
 app.get('/index', ensureAuthenticated, function(req, res) {
-  res.render('index.html');
+    res.render('index.html');
+    res.end()
 });
 
 app.get('/login', function(req, res){
     res.render('login.html');
+    res.end()
 });
 
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
@@ -99,13 +101,13 @@ app.get('/auth/facebook/callback',
   }));
 
 app.get('/logout', ensureAuthenticated, function(req, res){
-  req.logout();
-  res.redirect('/');
+    req.logout();
+    res.redirect('/');
 });
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) return next(); 
-    res.redirect('/login');
+    if (req.isAuthenticated()) return next(); 
+      res.redirect('/login');
 }
 
 app.listen(process.env.PORT || 3000);
