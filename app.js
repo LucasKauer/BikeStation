@@ -83,7 +83,7 @@ app.get('/', ensureAuthenticated, function(req, res){
 });
 
 app.get('/index', ensureAuthenticated, function(req, res) {
-  res.render('/index.html');
+  res.render('index.html');
 });
 
 app.get('/login', function(req, res){
