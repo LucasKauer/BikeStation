@@ -1,5 +1,3 @@
-(function() { window.location.protocol="http"})()
-
 var BikeStationDataPoaConfiguration = (function () {
 	'use strict';
 
