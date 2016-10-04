@@ -79,9 +79,7 @@ app.use(express.static(__dirname + '/public'));
 
 
 app.get('/', ensureAuthenticated, function(req, res){
-  if(req.isAuthenticated()) {
     res.render('index.html');
-  }
 });
 
 app.get('/login', function(req, res){
