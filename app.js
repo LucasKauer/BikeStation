@@ -1,4 +1,5 @@
 var express           =     require('express')
+  , jsonServer = require('json-server')
   , passport          =     require('passport')
   , util              =     require('util')
   , FacebookStrategy  =     require('passport-facebook').Strategy
@@ -8,6 +9,17 @@ var express           =     require('express')
   , config            =     require('./configuration/config')
   , mysql             =     require('mysql')
   , app               =     express();
+
+var server = jsonServer.create();
+var router = jsonServer.router('db.json');
+var middlewares = jsonServer.defaults();
+
+server.use(middlewares);
+server.use(router);
+server.listen(3001, function () {
+  console.log('JSON Server is running')
+});
+
 
 //Define MySQL parameter in Config.js file.
 var connection = mysql.createConnection({

@@ -13,7 +13,8 @@
 		"express-session": "~1.7.6",
 		"mysql": "~2.4.3",
 		"passport": "~0.2.1",
-		"passport-facebook": "latest"
+		"passport-facebook": "latest",
+		"json-server": "^0.8.22"
   	},
 		"scripts": {
 			"start": "node app.js"
