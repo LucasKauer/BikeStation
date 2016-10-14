@@ -7,7 +7,7 @@
 	</head>
 	<body>
 
-		<div id="mapContainer" class="container">
+		<div id="mapContainer" style="width:50%; height:50%;" class="container">
 		</div>
 
 		<div class="modal-marker-template">
@@ -15,15 +15,15 @@
 
 			<p id="number">Seu número é {{Number}}.</p>
 		</div>
-		<script type="text/javascript">
-			(function() { window.location.protocol="http"; })()
-		</script>
 		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-		<script type="text/javascript" src="js/GoogleMapsApi.js"></script>
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=AIzaSyCa3C5eOahcfE77jpNAGcA079U99lDWYiI"></script>
 		<script type="text/javascript" src="js/constants.js"></script>
 		<script type="text/javascript" src="js/bikestation-datapoa-configuration.js"></script>
 		<script type="text/javascript" src="js/location.js"></script>
 		<script type="text/javascript" src="js/load-datapoa.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
+		<script type="text/javascript">
+			(function() { window.location.protocol="http"; })()
+		</script>
 	</body>
 </html>
