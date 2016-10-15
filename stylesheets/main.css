@@ -7,3 +7,9 @@ html, body, #mapContainer {
   display: none;
   margin: auto;
 }
+
+.formings {
+  display: inline-block;
+  height: 100%;
+  margin-right: 10%;
+}
