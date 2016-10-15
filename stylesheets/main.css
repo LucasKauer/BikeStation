@@ -1,9 +1,9 @@
 html, body, #mapContainer {
   height: 100vh;
-  margin: 0px;
   padding: 0px;
 }
 
 .modal-marker-template {
   display: none;
+  margin: auto;
 }

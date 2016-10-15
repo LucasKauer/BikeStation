@@ -3,30 +3,31 @@
 	<head>
 		<title>Estações de Bicicleta em Porto Alegre</title>
 		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body>
+		<div id="mapContainer" style="width:50%; height:50%; margin: auto;" class="container"></div>
 
-		<div id="mapContainer" style="width:50%; height:50%;" class="container">
+		<div class="container">
+			<div class="modal-marker-template">
+				<h2 id="name">{{Name}}</h2>
+
+				<p id="number">Seu número é {{Number}}.</p>
+			</div>
+
+			
+
+			<form id="sendAMessage" action>
+				<input type="text" placeholder="Digite aqui suas coordenadas." name="text1" id="text1">
+				<input type="text" placeholder="Digite aqui suas coordenadas." name="text2" id="text2">
+				<input class="btn btn-default" type="submit" value="Salvar">
+			</form>
+
+			<a class="btn btn-primary"" href="/logout">Sair</a>
+
+			<div id="chat"></div>
 		</div>
-
-		<div class="modal-marker-template">
-			<h2 id="name">{{Name}}</h2>
-
-			<p id="number">Seu número é {{Number}}.</p>
-		</div>
-
-		
-
-		<form id="sendAMessage" action>
-			<input type="text" placeholder="Digite aqui suas coordenadas." name="text1" id="text1">
-			<input type="text" placeholder="Digite aqui suas coordenadas." name="text2" id="text2">
-			<input type="submit" value="Salvar">
-		</form>
-
-		<a href="/logout"><input type="button" value="Sair"></a>
-
-		<div id="chat"></div>
 
 		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=AIzaSyCa3C5eOahcfE77jpNAGcA079U99lDWYiI"></script>
@@ -49,7 +50,7 @@
 				$('#chat').empty();
 				$.get('http://localhost:3001/posts').success(function(dt) {
 					dt.forEach(function(d) {
-						$('#chat').append('<p>' + d.text1 + ', ' + d.text2 + '</p><button onclick="' + `removerData(${d.id})` + '">Remover anotação</button>');
+						$('#chat').append('<p>' + d.text1 + ', ' + d.text2 + '</p><button class="btn btn-danger" onclick="' + `removerData(${d.id})` + '">Remover anotação</button>');
 					});
 				});
 			};
