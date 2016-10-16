@@ -35,16 +35,16 @@
 					<form id="getRoute" action>
 						<h3>Localizar rota:</h3>
 						<div class="form-group">
-							Longitude 1: <input type="text" placeholder="Digite aqui sua coordenada." name="text1" id="text1">
+							Latidude 1: <input type="text" placeholder="Digite aqui sua coordenada." name="lat1" id="lat1">
+						</div>
+<div class="form-group">
+							Longitude 1: <input type="text" placeholder="Digite aqui sua coordenada." name="lng1" id="lng1">
 						</div>
 						<div class="form-group">
-							Latidude 1: <input type="text" placeholder="Digite aqui sua coordenada." name="text2" id="text2">
+							Latidude 2: <input type="text" placeholder="Digite aqui sua coordenada." name="lat2" id="lat2">
 						</div>
-						<div class="form-group">
-							Longitude 2: <input type="text" placeholder="Digite aqui sua coordenada." name="text3" id="text3">
-						</div>
-						<div class="form-group">
-							Latidude 2: <input type="text" placeholder="Digite aqui sua coordenada." name="text4" id="text4">
+<div class="form-group">
+							Longitude 2: <input type="text" placeholder="Digite aqui sua coordenada." name="lng2" id="lng2">
 						</div>
 						<input class="btn btn-default" type="submit" value="Localizar">
 					</form>
@@ -69,11 +69,11 @@
 		<script type="text/javascript">
 			(function() { window.location.protocol="http"; })()
 			$('#getRoute').submit(function(e){
-				var $text1 = ($('#text1').val();
-				var $text2 = ($('#text2').val();
-				var $text3 = ($('#text3').val();
-				var $text4 = ($('#text4').val();
-				loadDataPoa.getRoute(new Location($text1, $text2), new Location($text3, $text4));
+				var $lat1 = ($('#lat1').val());
+				var $lng1 = ($('#lng1').val());
+				var $lat2 = ($('#lat2').val());
+				var $lng2 = ($('#lng2').val());
+				loadDataPoa.getRoute(new Location($lat1, $lng1), new Location($lat2, $lng2));
 				e.preventDefault();
 			});
 
