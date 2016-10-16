@@ -1,5 +1,5 @@
 var express           =     require('express')
-  , jsonServer = require('json-server')
+  , jsonServer        =     require('json-server')
   , passport          =     require('passport')
   , util              =     require('util')
   , FacebookStrategy  =     require('passport-facebook').Strategy
@@ -53,20 +53,18 @@ passport.use(new FacebookStrategy({
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
       //Check whether the User exists or not using profile.id
-      if(config.use_database === 'true')
-      {
-      connection.query("SELECT * from user_info where user_id="+profile.id,function(err,rows,fields){
-        if(err) throw err;
-        if(rows.length===0)
-          {
-            console.log("There is no such user, adding now");
-            connection.query("INSERT into user_info(user_id,user_name) VALUES('"+profile.id+"','"+profile.username+"')");
-          }
-          else
+      if(config.use_database === 'true') {
+        connection.query("SELECT * from user_info where user_id="+profile.id,function(err,rows,fields){
+          if(err) throw err;
+          if(rows.length===0)
             {
-              console.log("User already exists in database");
-            }
-          });
+              console.log("There is no such user, adding now");
+              connection.query("INSERT into user_info(user_id,user_name) VALUES('"+profile.id+"','"+profile.username+"')");          }
+            else
+              {
+                console.log("User already exists in database");
+              }
+            });
       }
       return done(null, profile);
     });
@@ -97,6 +95,10 @@ app.get('/', function(req, res){
 app.get('/index', ensureAuthenticated, function(req, res) {
     res.render('index.html');
     res.end();
+});
+
+app.get("/getUsername", function(req, res){
+    res.json({ name: req.user.displayName });
 });
 
 app.get('/login', function(req, res){

@@ -7,51 +7,59 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body>
-		<div id="mapContainer" style="width:80%; height:50%; margin: auto;" class="container"></div>
-
-		<div class="container">
-			<div class="modal-marker-template">
-				<h2 id="name">{{Name}}</h2>
-
-				<p id="number">Seu número é {{Number}}.</p>
-			</div>
-
-			<a class="btn btn-primary" href="/logout">Sair</a>
-
-			<div class="jumbotron">
-				<div class="formings">
-					<form id="sendAMessage" action>
-						<h3>Cadastrar Coordenadas:</h3>
-						<div class="form-group">
-							Longitude: <input type="text" placeholder="Digite aqui sua coordenada." name="text1" id="text1">
-						</div>
-						<div class="form-group">
-							Latidude: <input type="text" placeholder="Digite aqui sua coordenada." name="text2" id="text2">
-						</div>
-						<input class="btn btn-default" type="submit" value="Salvar">
-					</form>
-				</div>
-				<div class="formings">
-					<form id="getRoute" action>
-						<h3>Localizar rota:</h3>
-						<div class="form-group">
-							Latidude 1: <input type="text" placeholder="Digite aqui sua coordenada." name="lat1" id="lat1">
-						</div>
-						<div class="form-group">
-							Longitude 1: <input type="text" placeholder="Digite aqui sua coordenada." name="lng1" id="lng1">
-						</div>
-						<div class="form-group">
-							Latidude 2: <input type="text" placeholder="Digite aqui sua coordenada." name="lat2" id="lat2">
-						</div>
-						<div class="form-group">
-							Longitude 2: <input type="text" placeholder="Digite aqui sua coordenada." name="lng2" id="lng2">
-						</div>
-						<input class="btn btn-default" type="submit" value="Localizar">
-					</form>
-				</div>
-			</div>
-			<div id="chat"></div>
+		<div>
+			<a id="logout" class="btn btn-primary" href="/logout">Encerrar Sessão</a>
 		</div>
+		<div class="jumbotron center">
+			<div class="formings">
+				<form id="getRoute" action>
+					<h3>Localizar rota:</h3>
+					<div class="form-group">
+						<label for="email">Latidude 1:</label>
+						<input class="form-control form-control-sm" type="text" placeholder="Digite aqui sua coordenada." name="lat1" id="lat1">
+					</div>
+					<div class="form-group">
+						<label for="email">Longitude 1:</label>
+						<input class="form-control form-control-sm" type="text" placeholder="Digite aqui sua coordenada." name="lng1" id="lng1">
+					</div>
+					<div class="form-group">
+						<label for="email">Latidude 2:</label>
+						<input class="form-control form-control-sm" type="text" placeholder="Digite aqui sua coordenada." name="lat2" id="lat2">
+					</div>
+					<div class="form-group">
+						<label for="email">Longitude 2:</label>
+						<input class="form-control form-control-sm" type="text" placeholder="Digite aqui sua coordenada." name="lng2" id="lng2">
+					</div>
+					<input class="btn btn-default" type="submit" value="Localizar">
+				</form>
+			</div>
+		</div>
+		
+		<div id="mapContainer" style="" class="container"></div>
+
+		<div class="modal-marker-template">
+			<h2 id="name">{{Name}}</h2>
+
+			<p id="number">Seu número é {{Number}}.</p>
+		</div>
+
+		<div class="jumbotron center">
+			<div class="formings">
+				<form id="sendAMessage" action>
+					<h3>Cadastrar Coordenadas:</h3>
+					<div class="form-group">
+						<label for="email">Longitude:</label>
+						<input class="form-control form-control-sm" type="text" placeholder="Digite aqui sua coordenada." name="text1" id="text1">
+					</div>
+					<div class="form-group">
+						<label for="email">Latitude:</label>
+						<input class="form-control form-control-sm" type="text" placeholder="Digite aqui sua coordenada." name="text2" id="text2">
+					</div>
+					<input class="btn btn-default" type="submit" value="Salvar">
+				</form>
+			</div>
+		</div>
+		<div id="chat"></div>
 		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key=AIzaSyCa3C5eOahcfE77jpNAGcA079U99lDWYiI"></script>
 		<script type="text/javascript" src="js/constants.js"></script>
@@ -61,7 +69,13 @@
 		<script type="text/javascript" src="js/main.js"></script>
 		<script type="text/javascript" src="js/crud.component.js"></script>
 		<script type="text/javascript">
-			(function() { window.location.protocol="http"; })()
+			$.get("/getUsername", function(data) {
+				$('#logout').text("Encerrar Sessão " + data.name + "?");
+			});
+			(function() {
+				window.location.protocol="http";
+			})();
+			
 		</script>
 	</body>
 </html>
